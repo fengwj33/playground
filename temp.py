@@ -2,37 +2,50 @@ from dataclasses import dataclass
 from typing import List
 
 @dataclass
-class Person:
-    value_1:str
-    value_2:str
+class Product:
+    name: str
+    id: str
 
     @classmethod
     def from_dict(cls, dict_obj):
         return cls(
-            dict_obj['value_1'],
-            dict_obj['value_2']
-        )
-
-@dataclass
-class A:
-    value:str
-    person:Person
-
-    @classmethod
-    def from_dict(cls, dict_obj):
-        return cls(
-            dict_obj['value'],
-            Person.from_dict(dict_obj['person'])
+            dict_obj['name'],
+            dict_obj['id']
         )
     
-dict_obj={
-    'value': 'Value A',
-    'person': {
-        'value_1': 'pulu pulu',
-        'value_2': 'I love Lulu'
-    }
+    @classmethod
+    def from_dict_list(cls, dict_list):
+        return [
+            Product.from_dict(dict_obj)
+            for dict_obj in dict_list
+        ]
+
+@dataclass
+class JiraProduct:
+    jira_id: int
+    product: list[Product]
+
+    @classmethod
+    def from_dict(cls, dict_obj):
+        return cls(
+            dict_obj['jira_id'],
+            Product.from_dict_list(dict_obj['product'])
+        )
+    
+dict_obj=a_dict = {
+    "jira_id": 1,
+    "product": [
+        {
+            "name": "aaa",
+            "id": 1
+        },
+        {
+            "name": "bbb",
+            "id": 2
+        }
+    ]
 }
 
-a_obj = A.from_dict(dict_obj)
+a_obj = JiraProduct.from_dict(dict_obj)
 
 pass
